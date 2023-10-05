@@ -1,0 +1,22 @@
+databases:
+  - name: cattest
+    databaseName: catwire
+    user: ExampleApp
+    region: oregon
+
+services:
+  - type: web
+    name: ExampleApp
+    env: ruby
+    region: oregon
+    plan: free
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: cattest
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+
